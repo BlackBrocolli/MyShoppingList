@@ -1,5 +1,7 @@
 package com.example.myshoppinglist
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -22,7 +25,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 
@@ -54,6 +59,7 @@ fun ShoppingList() {
             ) {
                 items(sItems) {
                     // Menambahkan item LazyColumn
+                    ShoppingListItem(it, {}, {})
                 }
             }
         }
@@ -76,7 +82,7 @@ fun ShoppingList() {
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Button(onClick = {
-                        if (itemName.isNotBlank()) {
+                        if (itemName.isNotBlank() && itemQty.isNotBlank()) {
                             val newItem =
                                 ShoppingItem(
                                     id = sItems.size + 1,
@@ -104,7 +110,7 @@ fun ShoppingList() {
                         onValueChange = { itemName = it },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth(),
-                        label = {Text("Name")}
+                        label = { Text("Name") }
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     OutlinedTextField(
@@ -118,5 +124,28 @@ fun ShoppingList() {
                 }
             }
         )
+    }
+}
+
+@Composable
+fun ShoppingListItem(
+    item: ShoppingItem,
+    onEditClick: () -> Unit, // lambda expression
+    onDeleteClick: () -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth()
+            .border(
+                border = BorderStroke(2.dp, Color(0XFF018786)),
+                shape = RoundedCornerShape(20)
+            )
+            .height(56.dp),
+        verticalAlignment = Alignment.CenterVertically
+
+    ) {
+        Text(item.name, modifier = Modifier.padding(16.dp))
+        Text(item.qty.toString(), modifier = Modifier.padding(8.dp))
     }
 }
